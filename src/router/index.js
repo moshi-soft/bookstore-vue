@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Books from '../views/Books.vue'
 import BookDetail from '../views/BookDetail.vue'
 import BookAdd from '../views/BookAdd.vue'
+import BookEdit from '../views/BookEdit.vue'
 
 const routes = [
   {
@@ -26,6 +27,12 @@ const routes = [
     path: '/books/new',
     name: 'BookAdd',
     component: BookAdd
+
+  },
+  {
+    path: '/books/:id/edit',
+    name: 'BookEdit',
+    component: BookEdit
 
   }
 ]

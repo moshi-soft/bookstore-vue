@@ -19,9 +19,8 @@
             <td>
                <!-- <router-link to="/books/anil">Detail</router-link> -->
               <router-link :to="`/books/${book.id}/detail`">Detail</router-link> |
-              <!-- <a href="#" @click.prevent="detailBookRecord(book)" style="margin-right:20px">Detail</a> -->
-              <a href="#" @click.prevent="updateBookRecord(book)" style="margin-right:20px;color:green">Edit</a>
-              <a href="#" @click.prevent="updateBookRecord(book)" style="margin-right:20px;color:red">Delete</a>
+              <router-link :to="`/books/${book.id}/edit`" style="margin-right:20px;color:green">Edit</router-link> |
+              <a href="#" @click.prevent="deleteBookRecord(book)" style="margin-right:20px;color:red">Delete</a>
             </td>
         </tr>
      </tbody>
@@ -48,6 +47,29 @@ export default {
         this.books = response.data;
         console.log(response.data)
       })
+    },
+    deleteBookRecord(record){
+      if(!confirm('Are you sure to delete?')){
+        return false
+      }
+      let self = this;
+      this.axios({
+                    method: 'DELETE',
+                    url: 'https://localhost:44344/api/Books/'+record.id,
+                })
+                .then(function (response) {
+                  //self.books.splice(record.id, 1);
+                  self.getList();
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                   // alert(JSON.stringify(error))
+                })
+              .finally(() => {
+                  //props.msg = 'Successfully Updated!';
+              });
+     // alert(record.id)
     }
   },
   beforeMount(){
