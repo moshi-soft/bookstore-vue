@@ -9,6 +9,9 @@
         <th>Description</th>
         <th>Author</th>
         <th>Publisher</th>
+        <th>Publish Status</th>
+        <th>Publish Date</th>
+        <th>Is Available</th>
        </tr>
      </thead>
      <tbody>
@@ -22,6 +25,21 @@
             </td>
             <td>
               {{book.publisherName}}
+            </td>
+            <td>
+              <span v-if="book.isPublished">Yes</span>
+              <span v-else>No</span>
+            </td>
+            <td>
+              <span v-if="book.isPublished">
+                <!-- {{book.datePublished}} -->
+                {{this.convertDatetimeToDate(book.datePublished)}}
+              </span>
+              
+            </td>
+            <td>
+              <span v-if="book.isAvaille">Yes</span>
+              <span v-else>No</span>
             </td>
         </tr>
      </tbody>
@@ -60,6 +78,10 @@ export default {
         this.book = response.data;
         //console.log(response.data)
       })
+    },
+    convertDatetimeToDate:function(datetime){
+      datetime = new Date(datetime);
+      return datetime.getDate() + "/" + (datetime.getMonth() + 1) + "/" + (datetime.getFullYear());
     }
   },
   beforeMount(){

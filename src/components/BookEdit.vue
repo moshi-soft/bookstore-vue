@@ -23,6 +23,22 @@
         <option v-for="author in authors" :key="author.id" :value="author.id">{{author.fullName}}</option>
       </select>
       <br><br>
+      <label for="available">Available</label>
+      <input v-if="form.isAvaille" checked name="isAvailable" type="radio" value="true" id="available" v-model="form.IsAvaille">
+      <input v-else name="isAvailable" type="radio" value="true" id="available" v-model="form.IsAvaille">
+
+      <label for="not_available">Not Available</label>
+      <input v-if="!form.isAvaille" checked name="isAvailable" value="false" type="radio" id="not_available" v-model="form.IsAvaille">
+      <input v-else name="isAvailable" value="false" type="radio" id="not_available" v-model="form.IsAvaille">
+      <br><br>
+      <label for="isPublished">Has Published?</label>
+      <input name="isPublished" type="checkbox" value="1" id="isPublished" v-model="form.isPublished">
+      <br><br>
+      <div v-if="form.isPublished">
+      <label for="publishDate">Published Date</label>
+      <input name="publishDate" type="date" id="publishDate" v-model="publishDate">
+      </div>
+      <br><br>
       <button @click.prevent="submitForm">Update</button>
   </div>
 </template>
@@ -46,11 +62,15 @@ export default {
       isSuccess:false,
       bookEditId:'',
       publishers:[],
+      publishDate:'',
       authors:[],
       form:{
           title: '',
           description: '',
           publisherId: '',
+          isAvaille : '',
+          isPublished : '',
+          datePublished : '',
           authorIds: []
       }
     }
@@ -68,12 +88,21 @@ export default {
     },
     getBookById: function(){
       this.axios.get('https://localhost:44344/api/Books/'+this.bookEditId).then((response) => {
+        
         this.form = response.data;
+        if(this.form.isPublished){
+          this.convertDbDateToFormDate(this.form.datePublished);
+        }
       })
     },
     submitForm: function(){
      console.log(this.form)
      let self = this;
+     if(this.form.isPublished){
+       this.convertDatetFormatToDbDate(this.publishDate)
+     }else{
+       this.form.datePublished='';
+     }
       this.axios({
                     method: 'put',
                     url: 'https://localhost:44344/api/Books/update-book-with-authors/'+this.bookEditId,
@@ -90,6 +119,16 @@ export default {
               .finally(() => {
                   //props.msg = 'Successfully Updated!';
               });
+    },
+    convertDatetFormatToDbDate:function(dateF){
+      dateF = new Date(dateF);
+      this.form.datePublished = dateF.getFullYear() + "-" + (dateF.getMonth() + 1) + "-" + (dateF.getDate());
+    },
+    convertDbDateToFormDate(dateF){
+      //dateF = new Date(dateF);      
+      //this.publishDate = (dateF.getMonth() + 1) + "/" + dateF.getUTCDate() + "/" + (dateF.getFullYear());
+      var now = new Date(dateF);
+          this.publishDate = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
     }
   },
   beforeMount(){

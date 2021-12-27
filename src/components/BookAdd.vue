@@ -24,6 +24,20 @@
         <option v-for="author in authors" :key="author.id" :value="author.id">{{author.fullName}}</option>
       </select>
       <br><br>
+      <label for="available">Available</label>
+      <input name="isAvailable" type="radio" checked value="true" id="available" v-model="form.isAvaille">
+
+      <label for="not_available">Not Available</label>
+      <input name="isAvailable" value="false" type="radio" id="not_available" v-model="form.isAvaille">
+      <br><br>
+      <label for="isPublished">Has Published?</label>
+      <input name="isPublished" type="checkbox" value="1" id="isPublished" v-model="form.isPublished">
+      <br><br>
+      <div v-if="form.isPublished">
+      <label for="publishDate">Published Date</label>
+      <input name="publishDate" type="date" id="publishDate" v-model="publishDate">
+      </div>
+      <br><br>
       <button @click.prevent="submitForm">Submit</button>
     <!-- </form> -->
   </div>
@@ -48,10 +62,14 @@ export default {
       isSuccess:false,
       publishers:[],
       authors:[],
+      publishDate:'',
       form:{
           title: '',
           description: '',
           publisherId: '',
+          isAvaille : '',
+          isPublished : '',
+          datePublished : '',
           authorIds: []
       }
     }
@@ -70,6 +88,12 @@ export default {
     submitForm: function(){
      console.log(this.form)
      let self = this;
+     if(this.form.isPublished){
+       this.convertDatetFormatToDbDate(this.publishDate)
+     }else{
+       this.form.datePublished='';
+     }
+     
       this.axios({
                     method: 'post',
                     url: 'https://localhost:44344/api/Books/add-book-with-authors',
@@ -86,6 +110,10 @@ export default {
               .finally(() => {
                   //props.msg = 'Successfully Updated!';
               });
+    },
+    convertDatetFormatToDbDate:function(dateF){
+      dateF = new Date(dateF);
+      this.form.datePublished = dateF.getFullYear() + "-" + (dateF.getMonth() + 1) + "-" + (dateF.getDate());
     }
   },
   beforeMount(){
