@@ -4,7 +4,7 @@
     <h3 v-if="isSuccess" style="color:green">
       Successfully added new book
     </h3>
-     <router-link to="/books">Back to List</router-link>
+     <router-link to="/">Back to List</router-link>
      <br><br><br>
      <!-- <form @submit.prevent="submitForm" method="POST"  action="https://localhost:44344/api/Books/api/Books/add-book-with-authors"> -->
       <label for="title">Book Name</label>

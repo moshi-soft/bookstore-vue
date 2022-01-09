@@ -4,7 +4,7 @@
     <h3 v-if="isSuccess" style="color:green">
       Successfully updated book
     </h3>
-     <router-link to="/books">Back to List</router-link>
+     <router-link to="/">Back to List</router-link>
      <br><br><br>
     <label for="title">Book Name</label>
       <input name="title" type="input" id="title" v-model="form.title">
@@ -77,9 +77,11 @@ export default {
   },
   methods:{
     getPublishers: function(){
-      this.axios.get('https://localhost:44344/api/Publishers/').then((response) => {
+      this.axios.get('https://localhost:44344/api/Publishers/')
+      .then((response) => {
         this.publishers = response.data;
       })
+      
     },
     getAuthors: function(){
       this.axios.get('https://localhost:44344/api/Authors/').then((response) => {
@@ -111,6 +113,9 @@ export default {
                 .then(function (response) {
                   self.isSuccess = true
                     console.log(response);
+                })
+                .then(()=>{
+                  this.$router.push({name:'Books'})
                 })
                 .catch(function (error) {
                     console.log(error);

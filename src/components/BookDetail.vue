@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-     <router-link to="/books">Back to List</router-link>
+     <router-link to="/">Back to List</router-link>
    <table>
      <thead style="background:skyblue">
        <tr>

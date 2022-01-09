@@ -47,7 +47,15 @@ export default {
         this.books = response.data;
         console.log(response.data)
       })
-    },
+      .catch(function (error) {
+        //alert('error')
+          console.log(error.response.status);
+          if(error.response.status == 401){
+            alert('You are not logged in please logged in first')
+          }
+         
+      })
+},
     deleteBookRecord(record){
       if(!confirm('Are you sure to delete?')){
         return false
