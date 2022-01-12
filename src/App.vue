@@ -16,11 +16,29 @@
 </template>
 <script>
 import {authComputed} from '@/store/helper.js'
-
+import axios from 'axios'
 export default{
   computed:{
     ...authComputed
   }, 
+  created(){
+    // automatic login
+    const userString = localStorage.getItem('user')
+    if(userString){
+      const userData = JSON.parse(userString)
+      this.$store.commit('SET_USER_DATA',userData)
+    }
+    // for security purpose so that fake login does not work
+    axios.interceptors.response.use(
+      response=>response,
+      error=>{
+        if(error.response.status === 401){
+          this.$store.dispatch('logout')
+        }
+        return Promise.reject(error)
+      }
+    )
+  },
   methods:{
     logout(){
       this.$store.dispatch('logout')

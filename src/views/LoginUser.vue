@@ -13,6 +13,9 @@
                 <label for="password" class='form-label float-start'>Password:</label>
                 <input type="password" v-model="password" name="password" class="form-control">
             </div>
+            <div class="alert-danger mb-3">
+            {{error}}
+            </div>
             <div class="mb-3">
                 <button type='submit' name='button' class="btn btn-success">Login</button>
             </div>
@@ -28,6 +31,7 @@
             return {
                 email :"",
                 password :"",
+                error:""
             }
         },
         methods:{
@@ -38,6 +42,10 @@
                 })
                 .then(()=>{
                     this.$router.push({name:'Books'})
+                })
+                .catch(err=>{
+                    console.log(err.response)
+                    this.error = 'Invalid email or password'
                 })
             }
         }

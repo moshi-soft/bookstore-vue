@@ -6,6 +6,8 @@ import BookAdd from '../views/BookAdd.vue'
 import BookEdit from '../views/BookEdit.vue'
 import RegisterUser from '../views/RegisterUser.vue'
 import LoginUser from '../views/LoginUser.vue'
+import NotFound from '../views/NotFound.vue'
+import NetworkIssue from '../views/NetworkIssue.vue'
 
 const routes = [
   // {
@@ -30,7 +32,10 @@ const routes = [
     meta:{
       requiresAuth:true
     },
-
+    props:true,
+    // beforeEnter: (to, from, next) => {
+      
+    // }
 
   },
   {
@@ -62,6 +67,29 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginUser
+  },
+  {
+    path:'/404',
+    name:'404',
+    component:NotFound,
+    props:true,
+  },
+  {
+    path:'/network-issue',
+    name:'network-issue',
+    component:NetworkIssue
+  },
+  {
+    path:'/:catchAll(.*)*',
+    redirect:{name:'404',params:{resource:'page'}},
+    // redirect: () => {
+    //   return { path: '/404' }
+    //   // the function receives the target route as the argument
+    //   // return redirect path/location here.
+    // },
+    meta: {
+      requiresAuth: false
+    }
   }
 ]
 

@@ -73,11 +73,34 @@ export default {
   },
   methods:{
     getBookDetail: function(){
+     // selff = this;
       //alert('ok')
-      this.axios.get('https://localhost:44344/api/Books/'+this.bookDetailId).then((response) => {
+      this.axios.get('https://localhost:44344/api/Books/'+this.bookDetailId)
+      .then((response) => {
         this.book = response.data;
         //console.log(response.data)
       })
+      .catch((error)=>{
+        if(error.response && error.response.status == 404){
+          this.$router.push({
+            name: "404",
+            params: { resource: "book" }
+          });
+        }else{
+           this.$router.push({
+            name: "network-issue"
+          });
+        }
+        
+      })
+      // .catch(function (error) {
+      //     console.log(error);
+      //     selff.$router.push({
+      //     name: "404",
+      //     params: { resource: "book" }
+      //   });
+      // })
+      //.catch((=> next({name:'404',params:{resource:'book '}})))
     },
     convertDatetimeToDate:function(datetime){
       datetime = new Date(datetime);
